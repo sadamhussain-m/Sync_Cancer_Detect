@@ -1,5 +1,8 @@
 import User from "../models/userSchema.js";
 
+import bcrypt from "bcrypt";
+
+
 const createUser=async(userData)=>{
 
     const {email,password}=userData;
@@ -10,7 +13,11 @@ const createUser=async(userData)=>{
         throw new Error("User already exists");
     }
 
-    const newUser=new User({email,password});
+    let hashedPassword=await bcrypt.hash(password,10);
+    console.log(hashedPassword);
+
+    const newUser=new User({email,hashedPassword});
+
 
     await newUser.save();
 
